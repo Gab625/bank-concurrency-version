@@ -9,7 +9,7 @@ Este projeto foi desenvolvido para fins acadêmicos com o objetivo de demonstrar
 * **Gabriel Prado Brandão:** Responsável pelo desenvolvimento da API REST (Controllers, Services, tratamento global de exceções),
 * configuração estrutural do Bloqueio Otimista no Banco de Dados
 * e pela configuração dos cenários de testes concorrentes no Apache JMeter, execução dos testes de estresse e coleta das métricas de erro.
-* 
+  
 ---
 
 ## Como Rodar a Aplicação
@@ -40,7 +40,7 @@ Este projeto foi desenvolvido para fins acadêmicos com o objetivo de demonstrar
      Invoke-WebRequest -Uri http://localhost:8080/contas-versionadas/inicializar -Method POST
      ```
 
-6. **Rodar os Testes no JMeter:** * Abra o Apache JMeter.
+6. **Rodar os Testes no JMeter:** Abra o Apache JMeter.
    * Importe os arquivos `Summary_Report.jmx` que estão localizados na raiz deste repositório.
    * Limpe o histórico de execuções anteriores(se houver) clicando no botão da **vassourinha dupla** (Clear All).
    * Clique no botão **Play Verde** para iniciar o teste de estresse concorrente (20 usuários simultâneos realizando loops de depósitos e saques de R$ 100,00).
@@ -53,7 +53,7 @@ Este projeto foi desenvolvido para fins acadêmicos com o objetivo de demonstrar
 Utilizando o arquivo de teste cenario1-sem-controle.jmx. No primeiro cenário, o endpoint de teste processou as 400 requisições simultâneas sem nenhuma trava de segurança ou isolamento lógico na aplicação.
 
 * **Comportamento no JMeter:** O relatório apresentou **0% de erro**, indicando que a API aceitou todas as requisições de forma bem-sucedida na camada HTTP.
-* **Comportamento no Banco de Dados:** O saldo final da conta no DBeaver apresentou inconsistências graves (divergindo do valor esperado de R$ 1000,00 originais após o balanço simétrico de depósitos e saques).
+* **Comportamento no Banco de Dados:** O saldo final da conta no DBeaver apresentou inconsistências graves (divergindo do valor esperado de manter o saldo após o balanço simétrico de depósitos e saques).
 * **Análise Técnica:** Ocorreu o fenômeno clássico de **Lost Update (Atualização Perdida)**. Como múltiplas threads leram o saldo original simultaneamente no banco, a gravação final de uma thread acabou sobrescrevendo a gravação da outra thread anterior de forma silenciosa, corrompendo a integridade financeira do registro.
 
 <img width="1531" height="878" alt="summary-report-conta-bancaria-sem-controle" src="https://github.com/user-attachments/assets/90066554-abae-4de1-b80e-872784a96f65" />
