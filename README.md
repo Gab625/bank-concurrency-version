@@ -69,8 +69,13 @@ No segundo cenário, o atributo `version` foi mapeado na entidade e anotado com 
 * **Análise Técnica:** O Bloqueio Otimista atuou com precisão. Quando threads concorrentes tentaram atualizar a mesma conta ao mesmo tempo, a primeira transação a chegar incrementou o número da versão do registro no banco para o nível seguinte. As threads subsequentes, que ainda carregavam o número de versão obsoleto em memória, falharam ao tentar executar a cláusula condicional de persistência:
   `[update conta_bancaria_versionada set saldo=?, titular=?, version=? where id=? and version=?]`
    Como o banco reportou `0` linhas alteradas, o Hibernate disparou imediatamente a exceção raiz **`org.hibernate.StaleStateException`** (capturada pela camada do Spring como `ObjectOptimisticLockingFailureException`), executando o rollback de segurança da operação antes que ela pudesse sobrescrever dados legítimos.
+  1. **Classe Controladora de Exceções Globais (`@ControllerAdvice`):** Desenvolvi um interceptador global que captura especificamente as exceções `ObjectOptimisticLockingFailureException` e `StaleStateException`.
+<img width="1404" height="612" alt="log-errors" src="https://github.com/user-attachments/assets/1cef7f7c-49e2-450d-a2d2-d3a21ef4c4c0" />
+2. **DTO de Erro Personalizado:** Criei um Data Transfer Object (DTO) para padronizar o corpo da resposta HTTP, permitindo retornar uma mensagem clara e legível ao usuário final.
 
 <img width="1531" height="871" alt="summary-report-conta-bancaria-versionada" src="https://github.com/user-attachments/assets/a4a270f4-216c-45ad-b29f-2070fd769ffd" />
+
+
 
 
 ---
