@@ -49,7 +49,7 @@ Este projeto foi desenvolvido para fins acadêmicos com o objetivo de demonstrar
 
 ## 📊 Relatório de Conclusão e Análise Comparativa
 
-### Parte 1: Conta Sem Controle de Concorrência 
+### Parte 1: Conta Sem Controle de Concorrência (Otimista)
 Utilizando o arquivo de teste cenario1-sem-controle.jmx. No primeiro cenário, o endpoint de teste processou as 400 requisições simultâneas sem nenhuma trava de segurança ou isolamento lógico na aplicação.
 
 * **Comportamento no JMeter:** O relatório apresentou **0% de erro**, indicando que a API aceitou todas as requisições de forma bem-sucedida na camada HTTP.
@@ -61,7 +61,7 @@ Utilizando o arquivo de teste cenario1-sem-controle.jmx. No primeiro cenário, o
 <img width="1241" height="443" alt="query-after-alter-sem-controle" src="https://github.com/user-attachments/assets/15b052e8-4a8a-4165-84cb-c897f3ca49e6" />
 
 
-### Parte 2: Conta Com Controle Otimista (`@Version`)
+### Parte 2: Conta Com Controle de Concorrência (Pessimista - ´@Version´)
 No segundo cenário, o atributo `version` foi mapeado na entidade e anotado com `@Version` do JPA/Hibernate. Um manipulador global de exceções foi acoplado para interceptar falhas de concorrência.
 
 * **Comportamento no JMeter:** O relatório do JMeter registrou de forma controlada uma média de **69% de erro** nas requisições
@@ -70,6 +70,8 @@ No segundo cenário, o atributo `version` foi mapeado na entidade e anotado com 
   `[update conta_bancaria_versionada set saldo=?, titular=?, version=? where id=? and version=?]`
    Como o banco reportou `0` linhas alteradas, o Hibernate disparou imediatamente a exceção raiz **`org.hibernate.StaleStateException`** (capturada pela camada do Spring como `ObjectOptimisticLockingFailureException`), executando o rollback de segurança da operação antes que ela pudesse sobrescrever dados legítimos.
  <img width="1531" height="871" alt="summary-report-conta-bancaria-versionada" src="https://github.com/user-attachments/assets/a4a270f4-216c-45ad-b29f-2070fd769ffd" />
+ <img width="1920" height="1080" alt="Captura de Tela (92)" src="https://github.com/user-attachments/assets/1f875c17-423e-4ff0-8366-7e6b64d17a47" />
+
   1. **Classe Controladora de Exceções Globais (`@ControllerAdvice`):** Desenvolvi um interceptador global que captura especificamente as exceções `ObjectOptimisticLockingFailureException` e `StaleStateException`.
 <img width="1404" height="612" alt="log-errors" src="https://github.com/user-attachments/assets/1cef7f7c-49e2-450d-a2d2-d3a21ef4c4c0" />
 2. **DTO de Erro Personalizado:** Criei um Data Transfer Object (DTO) para padronizar o corpo da resposta HTTP, permitindo retornar uma mensagem clara e legível ao usuário final.
