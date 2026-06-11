@@ -1,6 +1,6 @@
 # Projeto: Controle de Concorrência em API Bancária
 
-Este projeto foi desenvolvido para fins acadêmicos com o objetivo de demonstrar o problema de **Atualização Perdida (Lost Update)** em sistemas de alta concorrência e como resolvê-lo utilizando **Bloqueio Otimista (@Version)** com Spring Boot e Hibernate.
+Este projeto foi desenvolvido para fins acadêmicos com o objetivo de demonstrar o problema de **Atualização Perdida (Sem controle - Otimista)** em sistemas de alta concorrência e como resolvê-lo utilizando **Bloqueio Pessimista (@Version)** com Spring Boot e Hibernate.
 
 ---
 
